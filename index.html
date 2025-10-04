@@ -127,15 +127,17 @@
     }
 
     // ละหัวตารางคำว่า "ร้าน"/"shop"
-    async function fetchShops() {
-      const rows = await fetchSheet(SHOP_SHEET);
-      const firstVal = ((rows[0]?.c?.[0]?.f ?? rows[0]?.c?.[0]?.v) || "")
-                        .toString().trim().toLowerCase();
-      const startIndex = (firstVal === "ร้าน" || firstVal === "shop") ? 1 : 0;
-      return rows.slice(startIndex).map(r=>{
-        const c=r.c||[]; return (c[0]?.f ?? String(c[0]?.v ?? "")).trim();
-      }).filter(s=>s && s!=="ร้าน" && s.toLowerCase()!=="shop");
-    }
+   async function fetchShops() {
+  const rows = await fetchSheet(SHOP_SHEET);
+
+  return rows.map((r, idx) => {
+      const c = r.c || [];
+      const val = (c[0]?.f ?? String(c[0]?.v ?? "")).trim();
+      return val;
+    })
+    .filter(s => s && s.toLowerCase() !== "ร้าน" && s.toLowerCase() !== "shop");
+}
+
 
     function buildItemBlock(){
       const div = document.createElement('div');
